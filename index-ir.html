@@ -1,0 +1,108 @@
+<html>
+
+<head>
+    <title>PUBLICATION MANAGEMENT</title>
+    <meta charset="UTF-8">
+    <!-- from http://www.menucool.com/tooltip/css-tooltip -->
+    <link rel="stylesheet" href="tooltip/tooltip.css" type="text/css" />
+    <link rel="stylesheet" href="tablesorter/style.css" type="text/css" media="print, projection, screen" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="tablesorter/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="stats-ir.js"></script>
+    </script>
+    <style>
+        body {
+            background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <h1></h1>
+    <h1> PUBLICATION MANAGEMENT</h1>
+
+    <p> <a href="https://drait.edu.in/home/Computer-Science-and-Engineering-Faculty ">DR AMBEDKAR INSTITUTE OF TECHNOLOGY</a>(Department of Coumputer Science and Engineering)</p>
+
+    <p>How did you get on this list? See info <a href="index.html "><i>MAIN MENU</i></a>,</p>
+
+    <div id="date " style="width:800px "><small>Data scraped from Google Scholar</small></div>
+
+    <p/>
+
+    <table id="stats" border="0" class="tablesorter" width="300">
+        <thead>
+            <tr>
+                <th/>
+                <th>Name</th>
+                <th>Year</th>
+                <th>Citations</th>
+                <th>/y</th>
+                <th>H-index</th>
+                <th>/y</th>
+                <th>I10-index</th>
+                <th>/y</th>
+            </tr>
+        </thead>
+    </table>
+
+    <script>
+        function round(n) {
+            return Math.round(n * 10) / 10;
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            var regex = /user=([^&]+)/;
+            var match = regex.exec(data[i].url);
+            var userId = match[1];
+
+            var row = $('<tr/>');
+            var y = (2021 - data[i].year);
+            row.append($('<td>'));
+            row.append($('<td style="text-align: left "/>')
+                .html('<a href=" ' + data[i].url + ' " class="tooltip ">' + data[i].name +
+                    '<span><img class="callout " src="tooltip/tooltip.gif " />' +
+                    '<img style="padding-bottom: 10px " src="images/ ' + userId + '.png "/><br/>' +
+                    '<b>' + data[i].name + '</b><br/>' +
+                    data[i].affiliation + '<br/>' +
+                    '<small><i>' + data[i].keywords.join(', ') + '</i></small><br/>' +
+                    '</span></a>'));
+            row.append($('<td/>').html(data[i].year));
+            row.append($('<td/>').html(data[i].stats.citations[0]));
+            row.append($('<td/>').html(Math.round(data[i].stats.citations[0] / y)));
+            row.append($('<td/>').html(data[i].stats.hindex[0]));
+            row.append($('<td/>').html(round(data[i].stats.hindex[0] / y)));
+            row.append($('<td/>').html(data[i].stats.i10index[0]));
+            row.append($('<td/>').html(round(data[i].stats.i10index[0] / y)));
+            $("#stats ").append(row);
+        }
+
+        // http://tablesorter.com/docs/
+        $(document).ready(function() {
+            $("#date ").append("<p> <small > Last updated: " + date + " < /small></p > ");
+            $("#stats").tablesorter({
+                sortList: [
+                    [5, 1],
+                    [3, 1]
+                ]
+            });
+
+            // https://stackoverflow.com/questions/6549518/jquery-tablesorter-with-row-numbers
+            var table = $("#stats");
+            table.bind("sortEnd", function() {
+                var i = 1;
+                table.find("tr:gt(0)").each(function() {
+                    $(this).find("td:eq(0)").text(i);
+                    i++;
+                });
+            });
+        });
+    </script>
+
+    <p style="margin-top: 300px" />
+
+</body>
+
+</html>
